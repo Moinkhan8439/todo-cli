@@ -25,18 +25,16 @@ def loadMenu():
     elif(choice==1):
         loadAdd(todo)
     elif(choice==2):
-        loadView(todo)
-    elif(choice==3):
         loadUpdate(todo)
-    elif(choice==4):
+    elif(choice==3):
         loadRemove(todo)
-    loadDashboardTodo()
+    loadDashboardTodo(todo)
 
 def loadDashboardCommon(state,arrow,press):
     os.system('clear')
     while(1):
         todo.state="dashboard"
-        print("{0:>40}".format(getDate()))
+        print("{0:>40}".format(todo.getDate()))
         print("Welcome to Todo List Here is the quote of the day")
         print(todo.getQuote())
         print()
@@ -49,32 +47,37 @@ def loadDashboardCommon(state,arrow,press):
         print("To see Upcoming Press {press}".format(press=press))
         print("To go to menu, Enter 1")
         print("To exit press 0")
+        print("To login to a different date press L or l")
         return input()
 
 
-def loadDashboardTodo():
+def loadDashboardTodo(todo):
     c=loadDashboardCommon("ToDo","→","d or D")
     try:
         if(c=="d" or c=="D"):
-            loadDashboardCompleted()
+            loadDashboardCompleted(todo)
+        elif(c=="l" or c=="L"):
+            login(todo)
         elif(int(c)==1):
             loadMenu()
         else:
             exit()
     except ValueError:
-        loadDashboardTodo()
+        loadDashboardTodo(todo)
 
-def loadDashboardCompleted():
+def loadDashboardCompleted(todo):
     c=loadDashboardCommon("Completed","←","a or A")
     try:
         if(c=="a" or c=="A"):
-            loadDashboardTodo()
+            loadDashboardTodo(todo)
+        elif(c=="l" or c=="L"):
+            login(todo)
         elif(int(c)==1):
             loadMenu()
         else:
             exit()
     except ValueError:
-        loadDashboardCompleted()
+        loadDashboardCompleted(todo)
 
 def loadWelcome():
     print("1.Create a New TODO List")
@@ -139,13 +142,15 @@ def loadAdd(todo):
     time.sleep(1)
 
 
-def login():
+def login(todo):
+    os.system("clear")
     while(True):
         print("Date to Login ( Format dd-mm-yyyy): ")
         date=input()
         date=validate(date)
         if(date is not None):
-            return date
+            todo.setDate(date)
+            loadDashboardTodo(todo)
         else:
             print("Date format is not correct")
 
@@ -156,12 +161,6 @@ def viewtask(todo,date):
         print(index+1,task.getTitle())
     time.sleep(2)
 
-
-
-def loadView(todo):
-    date=login()
-    todo.setDate(date)
-    loadDashboardTodo()
 
 def loadUpdate(todo):
     todo.date
@@ -180,6 +179,6 @@ if __name__=="__main__":
         newDoc(todo)        
     else: ##Load a new todolist
         loadFile(todo)
-    loadDashboardTodo()
+    loadDashboardTodo(todo)
     
     

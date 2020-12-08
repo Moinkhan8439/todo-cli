@@ -1,6 +1,7 @@
 from os import system
 import os.path
 from tasks import task
+from datetime import datetime
 
 class Todo:
     date=""
@@ -13,6 +14,7 @@ class Todo:
         system('clear')
         self.state="dashboard"
         self.file=""
+        self.date=datetime.today().strftime("%d-%m-%Y")
 
     def getQuote(self):
         """Returns quote from the utility module"""
@@ -39,3 +41,6 @@ class Todo:
 
     def setDate(self,date):
         self.date=date
+
+    def getDate(self):
+        return self.date
